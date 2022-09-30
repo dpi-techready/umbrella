@@ -41,11 +41,57 @@ raw_forecast_data = URI.open(ds_api_url).read
 
 parse_forecast_data = JSON.parse(raw_forecast_data)
 
-first_response = parse_forecast_data.fetch("currently")
+currently_response = parse_forecast_data.fetch("currently")
 
-second_response = first_response.fetch("summary").to_s
+hourly_response = parse_forecast_data.fetch("hourly")
 
-third_response = first_response.fetch("temperature").to_s
+data_response_array = hourly_response.fetch("data")
+
+# time_response = data_response_array.at(0)
+
+# time_fetched = time_response.fetch("time")
+
+# precip_response = data_response_array.at(0)
+
+# precip_fetched = precip_response.fetch("precipProbability")
+
+temperature_response = currently_response.fetch("temperature").to_s
+
+summary_response = currently_response.fetch("summary").to_f
 
 # Display the current temperature and summary of the weather for the next hour.
-p "It is currently #{third_response}℉ and will be #{second_response} for the hour."
+p "It is currently #{temperature_response}℉ and will be #{summary_response} for the hour."
+
+# For each of the next twelve hours, check if the precipitation probability is greater than 10%.
+
+# p time_response
+# p precip_response
+# p time_fetched
+# p precip_fetched
+
+# data_response_array.each do |x|
+#   puts Time.at(x.fetch("time"))
+# end
+
+# data_response_array.each do |y|
+#   puts y.fetch("precipProbability")
+# end  
+
+i = 2
+
+data_response_array.each {|x|
+  puts Time.at(x.fetch("time"))
+  puts x.fetch("precipProbability")
+  i += 1
+  if i > 13
+    break
+end
+}
+
+# p precip_response[2..13]
+
+# p data_response_array[2..12]
+
+# data_response_array.each do |element|
+#   puts element
+# end 
